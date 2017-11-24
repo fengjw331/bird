@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+  <canvas id="mycanvas"></canvas>
+  <script>
+    var cv=document.getElementById("mycanvas");
+    cv.width=800;
+    cv.height=600;
+    cv.style.border="1px solid red";
+    var context=cv.getContext("2d");
+
+    //bird
+    var curAngle,maxAngle=45,maxSpeed=0.3,speed;
+    speed=0,frameIndex=0,y=100,a=0.0005;
+    var lastFrameTime=new Date(),curFrameTime= 0,delta=0;
+
+
+    var img=new Image();
+    img.src="./images/birds.png";
+
+    img.onload=function () {
+
+
+      (function render() {
+        curFrameTime=new Date();
+        delta=curFrameTime-lastFrameTime;
+        lastFrameTime=curFrameTime;
+
+        context.clearRect(0,0,cv.width,cv.height);
+        context.save();
+
+        curAngle=maxAngle/maxSpeed*speed;
+        if(curAngle>maxAngle){
+          curAngle=maxAngle;
+        }else if(curAngle<-maxAngle){
+          curAngle=-maxAngle;
+        }
+        context.translate(100,y);
+        context.rotate(toRadian(curAngle));
+        context.drawImage(img,frameIndex++*img.width/3,0,img.width/3,img.height,-1/2*img.width/3,-1/2*img.height,img.width/3,img.height);
+        frameIndex%=3;
+        speed=speed+a*delta;
+        y+=speed*delta+1/2*a*Math.pow(delta,2);
+        context.restore();
+        requestAnimationFrame(render);
+      })();
+    }
+
+    function toRadian(angle) {
+        return angle/180*Math.PI;
+    }
+
+    cv.addEventListener("click",function () {
+            speed=-0.3;
+        })
+  </script>
+</body>
+</html>
