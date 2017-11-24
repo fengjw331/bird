@@ -8,6 +8,8 @@
 </head>
 <body>
   <canvas id="mycanvas"></canvas>
+  <script src="./fly.js"></script>
+  <script src="./bird.js"></script>
   <script>
     var cv=document.getElementById("mycanvas");
     cv.width=800;
@@ -20,36 +22,23 @@
     speed=0,frameIndex=0,y=100,a=0.0005;
     var lastFrameTime=new Date(),curFrameTime= 0,delta=0;
 
-
-    var img=new Image();
-    img.src="./images/birds.png";
-
     img.onload=function () {
 
+      var bird=new Fly.bird({img:img});
+        (function render() {
+          curFrameTime=new Date();
+          delta=curFrameTime-lastFrameTime;
+          lastFrameTime=curFrameTime;
 
-      (function render() {
-        curFrameTime=new Date();
-        delta=curFrameTime-lastFrameTime;
-        lastFrameTime=curFrameTime;
+          context.clearRect(0,0,cv.width,cv.height);
+          context.save();
 
-        context.clearRect(0,0,cv.width,cv.height);
-        context.save();
 
-        curAngle=maxAngle/maxSpeed*speed;
-        if(curAngle>maxAngle){
-          curAngle=maxAngle;
-        }else if(curAngle<-maxAngle){
-          curAngle=-maxAngle;
-        }
-        context.translate(100,y);
-        context.rotate(toRadian(curAngle));
-        context.drawImage(img,frameIndex++*img.width/3,0,img.width/3,img.height,-1/2*img.width/3,-1/2*img.height,img.width/3,img.height);
-        frameIndex%=3;
-        speed=speed+a*delta;
-        y+=speed*delta+1/2*a*Math.pow(delta,2);
-        context.restore();
-        requestAnimationFrame(render);
-      })();
+          bird.draw(delta);
+
+          context.restore();
+          requestAnimationFrame(render);
+        })();
     }
 
     function toRadian(angle) {
