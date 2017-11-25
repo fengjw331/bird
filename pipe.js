@@ -24,6 +24,11 @@
       }
       context.drawImage(this.imgTop,this.x,this.topY);
       context.drawImage(this.imgBottom,this.x,this.bottomY);
+
+      //绘制碰撞路径
+      context.rect(this.x,this.topY,this.imgW,this.imgH);
+      context.rect(this.x,this.bottomY,this.imgW,this.imgH);
+      //context.stroke();
     },
     initPipeHeight:function () {
       var pipeTopHeight=Math.random()*200+50;

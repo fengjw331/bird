@@ -19,7 +19,7 @@
   cv.height = 600;
   cv.style.border = "1px solid red";
   var context = cv.getContext("2d");
-
+  var timer;
   var imgSrcList = ['birds', 'land', 'pipe1', 'pipe2', 'sky'];
   Fly.loadImage(imgSrcList, function (imgList) {
     //创建对象
@@ -63,6 +63,7 @@
       lastFrameTime = curFrameTime;
 
       context.clearRect(0, 0, cv.width, cv.height);
+      context.beginPath();
       context.save();
 
       roles.forEach(function (role) {
@@ -71,11 +72,17 @@
       bird.draw(delta);
 
       context.restore();
-      requestAnimationFrame(render);
+
+      //动画停止
+      if(bird.y<=5 || bird.y>=imgList.sky.height-imgList.land.height || context.isPointInPath(bird.x,bird.y)){
+//        cancelAnimationFrame(timer);
+      }else{
+      timer= requestAnimationFrame(render);
+      }
     })();
 
     cv.addEventListener("click", function () {
-      bird.speed = -0.3;
+      bird.speed = -0.2;
     });
     console.log(roles);
   });

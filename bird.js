@@ -11,6 +11,7 @@
     this.maxSpeed=0.3;
     this.speed=0;
     this.frameIndex=0;
+    this.x=100;
     this.y=100;
     this.a=0.0005;
   }
@@ -24,7 +25,7 @@
       }else if(this.curAngle<-this.maxAngle){
         this.curAngle=-this.maxAngle;
       }
-      context.translate(100,this.y);
+      context.translate(this.x,this.y);
       context.rotate(toRadian(this.curAngle));
       context.drawImage(this.birdImg,this.frameIndex++*this.imgW,0,this.imgW,this.imgH,-1/2*this.imgW,-1/2*this.imgH,this.imgW,this.imgH);
       this.frameIndex%=3;
