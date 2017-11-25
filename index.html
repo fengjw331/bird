@@ -7,47 +7,74 @@
   <title>Title</title>
 </head>
 <body>
-  <canvas id="mycanvas"></canvas>
-  <script src="./fly.js"></script>
-  <script src="./bird.js"></script>
-  <script>
-    var cv=document.getElementById("mycanvas");
-    cv.width=800;
-    cv.height=600;
-    cv.style.border="1px solid red";
-    var context=cv.getContext("2d");
+<canvas id="mycanvas"></canvas>
+<script src="./fly.js"></script>
+<script src="./bird.js"></script>
+<script src="./sky.js"></script>
+<script src="./land.js"></script>
+<script>
+  var cv = document.getElementById("mycanvas");
+  cv.width = 800;
+  cv.height = 600;
+  cv.style.border = "1px solid red";
+  var context = cv.getContext("2d");
 
-    //bird
-    var curAngle,maxAngle=45,maxSpeed=0.3,speed;
-    speed=0,frameIndex=0,y=100,a=0.0005;
-    var lastFrameTime=new Date(),curFrameTime= 0,delta=0;
-
-    img.onload=function () {
-
-      var bird=new Fly.bird({img:img});
-        (function render() {
-          curFrameTime=new Date();
-          delta=curFrameTime-lastFrameTime;
-          lastFrameTime=curFrameTime;
-
-          context.clearRect(0,0,cv.width,cv.height);
-          context.save();
-
-
-          bird.draw(delta);
-
-          context.restore();
-          requestAnimationFrame(render);
-        })();
+  var imgSrcList = ['birds', 'land', 'pipe1', 'pipe2', 'sky'];
+  Fly.loadImage(imgSrcList, function (imgList) {
+    //创建对象
+    //bird对象
+    var bird = new Fly.Bird({
+      img: imgList.birds
+    });
+    //其他对象
+    var roles = [];
+    //sky
+    for (var i = 0; i < 2; i++) {
+      var sky= new Fly.Sky({
+        img:imgList.sky,
+        x:imgList.sky.width*i
+      });
+      roles.push(sky);
     }
-
-    function toRadian(angle) {
-        return angle/180*Math.PI;
+    //land
+    for (var i = 0; i < 4; i++) {
+      var land = new Fly.Land({
+        img:imgList.land,
+        x:imgList.land.width*i,
+        y:imgList.sky.height-imgList.land.height
+      });
+      roles.push(land);
     }
+    var lastFrameTime = new Date(), curFrameTime = 0, delta = 0;
+    (function render() {
+      curFrameTime = new Date();
+      delta = curFrameTime - lastFrameTime;
+      lastFrameTime = curFrameTime;
 
-    cv.addEventListener("click",function () {
-            speed=-0.3;
-        })
-  </script>
+      context.clearRect(0, 0, cv.width, cv.height);
+      context.save();
+
+      roles.forEach(function (role) {
+          role.draw(delta);
+      });
+      bird.draw(delta);
+
+      context.restore();
+      requestAnimationFrame(render);
+    })();
+
+    cv.addEventListener("click", function () {
+      bird.speed = -0.3;
+    });
+    console.log(roles);
+  });
+
+
+  function toRadian(angle) {
+    return angle / 180 * Math.PI;
+  }
+
+
+</script>
 </body>
 </html>
