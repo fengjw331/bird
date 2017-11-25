@@ -3,6 +3,7 @@
  */
 (function (Fly) {
   function Pipe(option) {
+    this.context=option.context;
     this.imgTop=option.imgTop;
     this.imgBottom=option.imgBottom;
     this.imgW=this.imgTop.width;
@@ -17,6 +18,7 @@
   Pipe.prototype={
     constructor:Pipe,
     draw:function (delta) {
+      var context=this.context;
         this.x+=this.speed*delta;
       if(this.x<=-this.imgW){
         this.x+=this.imgW*3*6;

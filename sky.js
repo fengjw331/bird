@@ -4,6 +4,7 @@
 (function (Fly) {
   "use strict";
   function Sky(option) {
+    this.context=option.context;
     this.img=option.img;
     this.imgW=this.img.width;
     this.imgH=this.img.height;
@@ -14,6 +15,7 @@
   Sky.prototype={
     constructor:Sky,
     draw:function (delta) {
+      var context=this.context;
       this.x+=this.speed*delta;
       if(this.x<=-this.imgW){
         this.x+=this.imgW*2;

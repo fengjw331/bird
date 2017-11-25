@@ -4,6 +4,7 @@
 (function (Fly) {
   "use strict";
    function Land(option) {
+     this.context=option.context;
      this.img=option.img;
      this.imgH=this.img.height;
      this.imgW=this.img.width;
@@ -14,6 +15,7 @@
   Land.prototype={
     constructor:Land,
     draw:function (delta) {
+      var context=this.context;
         this.x+=this.speed*delta;
       if(this.x<=-this.imgW){
         this.x+=this.imgW*4;

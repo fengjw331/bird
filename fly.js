@@ -2,7 +2,8 @@
  * Created by Administrator on 2017/11/24.
  */
 (function (window) {
-  var Flyobj={};
+  var Flyobj=new Object();
+
   Flyobj.loadImage=function (srcList,callback) {
     var count= 0,length=srcList.length,imgList={};
     srcList.forEach(function (srcVal) {
@@ -16,7 +17,20 @@
         }
       }
     })
-  }
+  };
+  Flyobj.toRadian=function (angle) {
+    return angle / 180 * Math.PI;
+  };
+  Flyobj.createCV=function (id) {
+    var container = document.getElementById(id);
+    var cv =document.createElement('canvas');
+      cv.width = 800;
+      cv.height = 600;
+      cv.style.border = "1px solid red";
+      var context = cv.getContext("2d");
+      container.appendChild(cv);
+    return context;
+  };
 
   window.Fly=Flyobj;
 })(window);
