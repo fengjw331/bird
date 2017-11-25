@@ -12,6 +12,7 @@
 <script src="./bird.js"></script>
 <script src="./sky.js"></script>
 <script src="./land.js"></script>
+<script src="./pipe.js"></script>
 <script>
   var cv = document.getElementById("mycanvas");
   cv.width = 800;
@@ -35,6 +36,16 @@
         x:imgList.sky.width*i
       });
       roles.push(sky);
+    }
+
+    //pipe
+    for (var i = 0; i < 6; i++) {
+      var pipe = new Fly.Pipe({
+        imgTop:imgList.pipe2,
+        imgBottom:imgList.pipe1,
+        x:imgList.pipe1.width*3*i+300
+      });
+      roles.push(pipe);
     }
     //land
     for (var i = 0; i < 4; i++) {
