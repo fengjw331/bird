@@ -15,11 +15,20 @@
     this.y=100;
     this.a=0.0005;
     this.context=option.context;
+
+    this.landPosY=option.landPosY;
+    this.listeners=[];
   }
 
   Bird.prototype={
     constructor:Bird,
     draw:function (delta) {
+
+       //动画停止
+       if(this.y<=5 || this.y>=this.landPosY || this.context.isPointInPath(this.x,this.y)){
+       this.trigger();
+       }
+
       var context=this.context;
       this.curAngle=this.maxAngle/this.maxSpeed*this.speed;
       if(this.curAngle>this.maxAngle){
@@ -33,6 +42,14 @@
       this.frameIndex%=3;
       this.speed+=this.a*delta;
       this.y+=this.speed*delta+1/2*this.a*Math.pow(delta,2);
+    },
+    trigger:function () {
+      this.listeners.forEach(function (fn) {
+        fn();
+      })
+    },
+    addListener:function (fn) {
+      this.listeners.push(fn)
     }
   }
 

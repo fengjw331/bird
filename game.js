@@ -47,10 +47,10 @@
           });
           that.hero.draw(that.delta);
 
-          //动画停止
+/*          //动画停止
           if(that.hero.y<=5 || that.hero.y>=imgList.sky.height-imgList.land.height || context.isPointInPath(that.hero.x,that.hero.y)){
             that.stop();
-          }
+          }*/
           context.restore();
           //起止状态
           if(that.isStart){
@@ -59,17 +59,24 @@
         })();
       },
       createRoles:function (imgList) {
+        var roles=this.roles,that=this;
+
         //创建对象
         //bird对象
-        this.hero = new Fly.Bird({
+        this.hero = Fly.factory('Bird',{
+          landPosY:imgList.sky.height - imgList.land.height,
           img: imgList.birds,
           context:this.context
         });
+
+        this.hero.addListener(function () {
+            that.stop();
+        })
         //其他对象
-        var roles=this.roles;
+
         //sky
         for (var i = 0; i < 2; i++) {
-          var sky= new Fly.Sky({
+          var sky= Fly.factory('Sky',{
             img:imgList.sky,
             x:imgList.sky.width*i,
             context:this.context
@@ -79,7 +86,7 @@
 
         //pipe
         for (var i = 0; i < 6; i++) {
-          var pipe = new Fly.Pipe({
+          var pipe = Fly.factory('Pipe',{
             imgTop:imgList.pipe2,
             imgBottom:imgList.pipe1,
             x:imgList.pipe1.width*3*i+300,           context:this.context
@@ -88,7 +95,7 @@
         }
         //land
         for (var i = 0; i < 4; i++) {
-          var land = new Fly.Land({
+          var land = Fly.factory ('Land',{
             img:imgList.land,
             x:imgList.land.width*i,
             y:imgList.sky.height-imgList.land.height,
@@ -105,5 +112,13 @@
       }
     }
 
-  Fly.Game=Game;
+  //Fly.Game=Game;
+  //单例模式 instance null-->唯一实例对象
+  var instance=null;
+  Fly.Game=function (option) {
+      if(instance===null){
+        instance=new Game(option);
+      }
+    return instance;
+  }
 })(Fly)

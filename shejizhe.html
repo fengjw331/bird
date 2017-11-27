@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <script>
+    // 设计模式：
+
+    // 1 工厂模式
+    // 作用：隐藏了创建对象的细节，不需要在通过new来创建对象，将创建对象整合到一起，有利于管理
+    /* function Person() {}
+
+    // 创建工厂函数：
+    var factory = function() {
+      return new Person();
+    };
+
+    var p = factory(); */
+
+    // 2 单例模式
+    // 作用：保证整个程序运行期间只有一个实例对象！
+    // 构造函数
+    /* function Person() {
+
+    }
+    var p = new Person();
+    var p1 = new Person(); */
+
+     var createPerson = function () {
+      // 构造函数
+      function Person() {
+      }
+
+      var instance = null;
+      return function () {
+        if (instance === null) {
+          instance = new Person();
+        }
+
+        return instance;
+      };
+    }();
+
+    var p1 = createPerson();
+    var p2 = createPerson();
+    var p3 = new createPerson();
+    console.log(p1 === p2);
+    console.log(p3 === p2);
+
+    // 3 观察者模式
+    // 场景：狗大叫一声，吓跑了小偷，吵醒了主人
+
+    // 发布者：狗
+    // 订阅者：小偷 和 主人
+
+    // 狗
+    var dog = {
+      // 狗叫的方法
+      bark: function() {
+        console.log('狗: 汪汪汪');
+
+        this.trigger();
+      },
+
+      // 添加订阅者列表, 用来存放订阅者接受到消息的行为
+      // 在这个例子中, 用来存储各个对象接受到消息的方法
+      listeners: [],
+
+      // 触发消息:
+      trigger: function() {
+        // 遍历订阅者列表, 分别调用每个订阅者的方法(行为)
+        this.listeners.forEach(function( fn ) {
+          fn();
+        });
+      },
+
+      // 添加订阅
+      addListener: function( fn ) {
+        this.listeners.push( fn );
+      }
+    };
+
+    // 小偷
+    var thief = {
+      // 小偷逃跑
+      run: function() {
+        console.log('小偷想: 我还会再回来的');
+      }
+    };
+
+    // 主人
+    var master = {
+      // 主人醒了
+      wake: function() {
+        console.log('主人想: 难道又是老王???');
+      }
+    };
+
+    // 老王
+    var laowang = {
+      think: function() {
+        console.log('老王想: 我没去,谁去了???');
+      }
+    };
+
+    // 订阅消息
+    dog.addListener( thief.run );
+    dog.addListener( master.wake );
+    dog.addListener( laowang.think );
+
+    // 狗叫:
+    dog.bark();
+
+  </script>
+</body>
+
+</html>
